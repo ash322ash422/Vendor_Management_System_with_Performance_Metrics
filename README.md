@@ -50,16 +50,18 @@ C:\Users\hi\my_project> venv\Scripts\activate
 
 (venv) C:\Users\hi\my_project\VMS> python manage.py runserver
 
-Now if you goto URL 'http://127.0.0.1:8000', you would see all endpoints.
+Now if you goto URL 'http://127.0.0.1:8000', you would see all endpoints. Keep the server running.
 
 7) Now open another terminal(a.k.a. command line) and perform individual test as described below:
 
 NOTE: Make sure you are in virtual env. as described below.
 
 *******************
-C:\Users\hi>cd my_project
+The following commands are on a brand new terminal :
 
-C:\Users\hi\my_project>venv\Scripts\activate
+C:\Users\hi> cd my_project
+
+C:\Users\hi\my_project> venv\Scripts\activate
 
 (venv) C:\Users\hi\my_project>
 
