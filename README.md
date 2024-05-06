@@ -20,20 +20,6 @@ EXAMPLE OF ABOVE PROCEDURE ON MY COMPUTER:
 
 C:\Users\hi> git clone https://github.com/ash322ash422/Vendor_Management_System_with_Performance_Metrics my_project
 
-Cloning into 'my_project'...
-
-remote: Enumerating objects: 107, done.
-
-remote: Counting objects: 100% (107/107), done.
-
-remote: Compressing objects: 100% (75/75), done.
-
-remote: Total 107 (delta 41), reused 93 (delta 27), pack-reused 0
-
-Receiving objects: 100% (107/107), 74.71 KiB | 513.00 KiB/s, done.
-
-Resolving deltas: 100% (41/41), done.
-
 C:\Users\hi> cd my_project
 
 C:\Users\hi\my_project> C:\Users\hi\AppData\Local\Programs\Python\Python311\python.exe -m venv venv   <-NOTE: I am using python3.11
@@ -79,7 +65,7 @@ C:\Users\hi\my_project>venv\Scripts\activate
 
 ******************
 
-Now go inside 'VMS\api' directory and type following commands:
+Now go inside 'VMS\api' directory and run test to verify functionality of endpoints as described below:
 
 (venv) C:\Users\hi\my_project> cd VMS\api
 
@@ -127,3 +113,5 @@ PUT /api/purchase_orders/{po_id}/acknowledge/
 (venv) C:\Users\hi\my_project\VMS> python manage.py test
 
 *) I performed above test and output is given in file test_output.txt
+
+If you have any further questions email me.
