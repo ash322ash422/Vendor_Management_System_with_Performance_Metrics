@@ -38,7 +38,7 @@ GET /api/purchase_orders/{po_id}/
 PUT /api/purchase_orders/{po_id}/
 DELETE /api/purchase_orders/{po_id}/
 
-...\Vendor_Management_System_with_Performance_Metrics\VMS\api> python test_api_backend.py
+...\Vendor_Management_System_with_Performance_Metrics\VMS\api> python test_api_backend_logic.py
 
 This checks following endpoints:
 GET /api/vendors/{vendor_id}/performance/
