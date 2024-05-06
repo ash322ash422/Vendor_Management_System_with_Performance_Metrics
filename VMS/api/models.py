@@ -113,7 +113,7 @@ class Vendor(BaseModel):
         filter_po_data = self.purchase_orders.filter(
             issue_date__isnull=False, acknowledgment_date__isnull=False
         )
-
+        
         if filter_po_data.exists():
             result = filter_po_data.aggregate(
                 avg_response_time=models.Avg(
