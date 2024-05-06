@@ -14,6 +14,36 @@ and then go into the project directory:
 
 FOR WINDOWS: First run 'python -m venv venv' and then run 'venv\Scripts\activate'
 
+*********************************
+
+EXAMPLE OF ABOVE PROCEDURE ON MY COMPUTER:
+
+C:\Users\hi>git clone https://github.com/ash322ash422/Vendor_Management_System_with_Performance_Metrics
+
+Cloning into 'Vendor_Management_System_with_Performance_Metrics'...
+
+remote: Enumerating objects: 104, done.
+
+remote: Counting objects: 100% (104/104), done.
+
+remote: Compressing objects: 100% (72/72), done.
+
+remote: Total 104 (delta 39), reused 92 (delta 27), pack-reused 0
+
+Receiving objects: 100% (104/104), 73.81 KiB | 469.00 KiB/s, done.
+
+Resolving deltas: 100% (39/39), done.
+
+C:\Users\hi>cd Vendor_Management_System_with_Performance_Metrics
+
+C:\Users\hi\Vendor_Management_System_with_Performance_Metrics>python -m venv venv
+
+C:\Users\hi\Vendor_Management_System_with_Performance_Metrics>venv\Scripts\activate
+
+(venv) C:\Users\hi\Vendor_Management_System_with_Performance_Metrics>
+
+*********************************
+
 *) Install all required packages:
 
 ...\Vendor_Management_System_with_Performance_Metrics> pip install -r requirements.txt
