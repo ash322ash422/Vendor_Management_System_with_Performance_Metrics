@@ -6,7 +6,8 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'VMS.settings.development')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'VMS.settings')
+    #os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'VMS.settings.development')
     #os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'VMS.settings.production')
     try:
         from django.core.management import execute_from_command_line

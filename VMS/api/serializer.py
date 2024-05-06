@@ -1,49 +1,67 @@
 from rest_framework import serializers
-from  .models import Vendor, PurchaseOrder
+from  .models import (Vendor,
+                      PurchaseOrder,
+                      OrderStatus
+                      )
+from .my_signals import ( po_acknowledged_signal,
+                          po_status_completed_signal,
+                        )
+ 
+class VendorSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Vendor
+        fields = '__all__'
+        read_only_fields = ["id","created_at","updated_at"]
+    #end class
+#end class
+
+class VendorPerformanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vendor
+        fields = [
+            "on_time_delivery_rate",
+            "quality_rating_avg",
+            "average_response_time",
+            "fulfillment_rate",
+        ]
+#end class
 
 class PurchaseOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = PurchaseOrder
-        fields = ['po_number','vendor']
+        fields = '__all__'
         
-        po_number = serializers.CharField()
-        vendor = 'v22'
-"""
-    
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        if instance.status == OrderStatus.COMPLETED:
+            po_status_completed_signal.send(
+                sender=instance.__class__, instance=instance
+            )
+        return instance
 
-order_date = models
-delivery_date = mod
-items = models.JSON
-quantity = models.I
-status = models.Cha
-quality_rating = mo
-issue_date = models
-acknowledgment_date
-#end class
 
-"""
 
-class VendorSerializer(serializers.ModelSerializer):
-    p_orders = serializers.StringRelatedField(many=True)
-    
+
+class PurchaseOrderAcknowledgeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Vendor
-        fields = '__all__' # This would retrieve all fields
-        #exclude = ['average_response_time']
-    #end class
-#end class
+        model = PurchaseOrder
+        fields = ["acknowledgment_date"]
+        extra_kwargs = {"acknowledgment_date": {"required": True}}
 
+    def validate_acknowledgment_date(self, value):
+        if not value:
+            value = timezone.now()
+        return value
 
-"""
-class SongSerializer(serializers.ModelSerializer):
-    class Meta:
-      model = Song
-      fields = ('id', 'name')
-      
-class ArtistSerializer(serializers.ModelSerializer):
-  songs = SongSerializer(many=True)
-   
-  class Meta:
-    model = Artist
-    fields = ('id', 'name', 'songs')
-"""    
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        
+        po_acknowledged_signal.send(sender=instance.__class__,
+                                    instance=instance )
+        
+        return instance
