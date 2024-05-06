@@ -2,7 +2,7 @@
  
  I used python3.11 for this project.
 
-*) Get a clone of the project:
+1) Get a clone of the project:
 
 git clone https://github.com/ash322ash422/Vendor_Management_System_with_Performance_Metrics my_project
 
@@ -10,7 +10,7 @@ and then go into the project directory:
 
  'cd my_project'
 
-*) Create a virtual env. using python3.11 as shown in steps below:
+2) Create a virtual env. using python3.11 as shown in steps below:
 
 FOR WINDOWS: First run 'python -m venv venv' and then run 'venv\Scripts\activate'
 
@@ -30,11 +30,11 @@ C:\Users\hi\my_project> venv\Scripts\activate
 
 *********************************
 
-*) Install all required packages:
+3) Install all required packages:
 
 (venv) C:\Users\hi\my_project> pip install -r requirements.txt
 
-*) Go into VMS directory, and enter migrations commands:
+4) Go into VMS directory, and enter migrations commands:
 
 (venv) C:\Users\hi\my_project> cd VMS
 
@@ -42,17 +42,17 @@ C:\Users\hi\my_project> venv\Scripts\activate
 
 (venv) C:\Users\hi\my_project\VMS> python manage.py migrate 
 
-*)
-(I already have created superuser='admin' with password='admin'. So following command may not be useful to you )
+5) I already have created superuser='admin' with password='admin'. So following command may not be useful to you:
 
 (venv) C:\Users\hi\my_project\VMS> python manage.py createsuperuser
 
-*)
+6) Now run the server: 
+
 (venv) C:\Users\hi\my_project\VMS> python manage.py runserver
 
 Now if you goto URL 'http://127.0.0.1:8000', you would see all endpoints.
 
-*) Now open another terminal(a.k.a. command line) and perform individual test as described below:
+7) Now open another terminal(a.k.a. command line) and perform individual test as described below:
 
 NOTE: Make sure you are in virtual env. as described below.
 
@@ -112,6 +112,6 @@ PUT /api/purchase_orders/{po_id}/acknowledge/
 
 (venv) C:\Users\hi\my_project\VMS> python manage.py test
 
-*) I performed above test and output is given in file test_output.txt
+8) I performed above test and output is given in file test_output.txt
 
 If you have any further questions email me.
