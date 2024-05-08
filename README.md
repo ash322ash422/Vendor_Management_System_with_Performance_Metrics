@@ -4,8 +4,6 @@
 
 1) Get a clone of the project(make sure you have 'git' installed on  windows):
 
-git clone https://github.com/ash322ash422/Vendor_Management_System_with_Performance_Metrics my_project
-
 and then go into the project directory:
 
 C:\Users\hi> git clone https://github.com/ash322ash422/Vendor_Management_System_with_Performance_Metrics my_project
