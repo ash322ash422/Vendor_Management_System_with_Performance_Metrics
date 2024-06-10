@@ -16,9 +16,22 @@ class OrderStatus(StrEnum):
 #end class
 
 po_number_for_test = ['po1','po2','po3']
-vendor_code_for_test = ['1','2',]
+#vendor_code_for_test = ['1','2',]
+vendor_id_created_for_test = []
 
 print("****************Running ",os.path.basename(__file__),"**************************")
+#Following code retrieves the token for a user.
+#You can also use POSTMAN:Enter URL=http://127.0.0.1:8000/api-token-auth/ with method=POST,
+# then select the 'Body' tab and under 'raw' enter {"username":"admin","password": "admin"} 
+url = 'http://127.0.0.1:8000/api-token-auth/'
+response = requests.post(url,data={'username': 'admin', 'password': 'admin'})
+print('Response from server: ' + str(response.json()))
+response_dict = json.loads(response.text)
+token = response_dict['token']
+print('token=',token) ## This token is valid infinitely long time.
+HEADERS={"Authorization": "Token " + token }
+print("#############################")
+
 print("Creating 3 purchase orders for testing.....")
 #Send a POST request to create a new vendor
 print("..1st we create 2 vendors..")
@@ -26,32 +39,32 @@ print("....Sending POST /api/vendors/")
 response = requests.post("http://127.0.0.1:8000/api/vendors/", 
     data={'name': 'vendor1', 'contact_details': 'vendor1 contact details here',
           'address': 'vendor1 address here',
-          'vendor_code': vendor_code_for_test[0], 
           'on_time_delivery_rate': 1.0, 'quality_rating_avg': 1.0, 'fulfillment_rate': 1.0,
           'average_response_time': 1.0
           },
-    #headers={"Content-Type": "application/json"},
+    headers=HEADERS,
 )
 print('....Response from server: ' + str(response.json()))
 response_dict = json.loads(response.text)
-vendor_id1 = response_dict["id"] 
+vendor_id1 = response_dict["id"]
+vendor_id_created_for_test.append(vendor_id1)
 print("....successfully created vendor_id:",vendor_id1)
 
 print("....Sending POST /api/vendors/")
 response = requests.post("http://127.0.0.1:8000/api/vendors/", 
     data={'name': 'vendor2', 'contact_details': 'vendor2 contact details here',
           'address': 'vendor2 address here',
-          'vendor_code': vendor_code_for_test[1], 
           'on_time_delivery_rate': 2.0, 'quality_rating_avg': 2.0, 'fulfillment_rate': 2.0,
           'average_response_time': 2.0
           },
-    #headers={"Content-Type": "application/json"},
+    headers=HEADERS,
 )
 print('....Response from server: ' + str(response.json()))
 response_dict = json.loads(response.text)
 vendor_id2 = response_dict["id"] 
+vendor_id_created_for_test.append(vendor_id2)
 print("....successfully created vendor_id:",vendor_id2)
-
+print("......successfully created vendor_id_created_for_test:",vendor_id_created_for_test)
 
 
 print("Sending POST /api/purchase_orders/")
@@ -68,14 +81,12 @@ response = requests.post("http://127.0.0.1:8000/api/purchase_orders/",
           'items': json.dumps("Really Cool Item"),
           #'items':  json.dumps({"item_name": "Cool Item", "quantity":13, "unit_price": 1.0}) #This works too
           },
-    
+    headers=HEADERS,
 )
 print('Response from server: ' + str(response.json()))
 response_dict = json.loads(response.text)
 po_id1 = response_dict["id"] 
 print("Successfully created purchase order id: ",po_id1)
-
-
 
 print("Sending POST /api/purchase_orders/")
 response = requests.post("http://127.0.0.1:8000/api/purchase_orders/", 
@@ -91,7 +102,7 @@ response = requests.post("http://127.0.0.1:8000/api/purchase_orders/",
           'items': json.dumps("Another awesome Item"),
           #'items':  json.dumps({"item_name": "Cool Item", "quantity":13, "unit_price": 1.0}) #This works too
           },
-    
+    headers=HEADERS,
 )
 print('Response from server: ' + str(response.json()))
 response_dict = json.loads(response.text)
@@ -112,7 +123,7 @@ response = requests.post("http://127.0.0.1:8000/api/purchase_orders/",
           'items': json.dumps("Weird Item"),
           #'items':  json.dumps({"item_name": "Cool Item", "quantity":13, "unit_price": 1.0}) #This works too
           },
-    
+    headers=HEADERS,
 )
 print('Response from server: ' + str(response.json()))
 response_dict = json.loads(response.text)
@@ -122,7 +133,7 @@ print("Successfully created purchase order id: ",po_id3)
 print("########################################")
 #Send a GET request to retrieve all purchase_orders
 print("Sending GET /api/purchase_orders/")
-response = requests.get('http://127.0.0.1:8000/api/purchase_orders/')
+response = requests.get('http://127.0.0.1:8000/api/purchase_orders/',headers=HEADERS,)
 print('Response from server: ' + str(response.json()))
 print("#################################################")
 
@@ -140,35 +151,33 @@ response = requests.put("http://127.0.0.1:8000/api/purchase_orders/{}/".format(p
           'quality_rating': 1.0,
           'items': json.dumps("Updated Awesome Item"),
           },
+    headers=HEADERS,
 )
 print('Response from server: ' + str(response.json()))
 print("#################################################")
 
 #Send a GET request to retrieve purchase order 
 print("Sending GET /api/purchase_orders/{}/".format(po_id2))
-response = requests.get("http://127.0.0.1:8000/api/purchase_orders/{}/".format(po_id2),)
+response = requests.get("http://127.0.0.1:8000/api/purchase_orders/{}/".format(po_id2),headers=HEADERS,)
 print('Response from server: ' + str(response.json()))
 
 print("#################################################")
 
 #Send a DELETE request to delete purchase order 
 print("Sending DELETE /api/purchase_orders/{}/".format(po_id2))
-response = requests.delete("http://127.0.0.1:8000/api/purchase_orders/{}/".format(po_id2),)
+response = requests.delete("http://127.0.0.1:8000/api/purchase_orders/{}/".format(po_id2),headers=HEADERS,)
 print("Successfully deleted po_id = {}".format(po_id2))
 
 
 print("#################################################")
 print("Now we delete all vendors that we created in this test script:")
-response = requests.get('http://127.0.0.1:8000/api/vendors/')
-response_list_of_dict_vendors = json.loads(response.text)
 
- #we delete all these vendors
-for i in range(len(response_list_of_dict_vendors)):
-    if response_list_of_dict_vendors[i]["vendor_code"] in vendor_code_for_test:
-       vendor_id = response_list_of_dict_vendors[i]["id"]
-       print("Sending DELETE /api/vendors/{}/".format(vendor_id))
-       response = requests.delete( "http://127.0.0.1:8000/api/vendors/{}/".format(vendor_id),)
-       print("..Successfully deleted vendor_id = {}".format(vendor_id))
+#we delete all these vendors
+for i in range(len(vendor_id_created_for_test)):
+    vendor_id = vendor_id_created_for_test[i]
+    print("Sending DELETE /api/vendors/{}/".format(vendor_id))
+    response = requests.delete( "http://127.0.0.1:8000/api/vendors/{}/".format(vendor_id),headers=HEADERS,)
+    print("..Successfully deleted vendor_id = {}".format(vendor_id))
 
 print("All purchase orders that were created for above vendors for testing are deleted too.")
 print();print();print();print();print();

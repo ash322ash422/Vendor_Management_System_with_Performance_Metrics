@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from enum import StrEnum
 from typing import Union
+import uuid
+from django.urls import reverse
 
 class OrderStatus(StrEnum):
     PENDING = "pending"
@@ -18,8 +20,15 @@ CHOICES_STATUS= (
     (OrderStatus.PENDING,OrderStatus.PENDING),
     (OrderStatus.COMPLETED,OrderStatus.COMPLETED),
     (OrderStatus.CANCELLED,OrderStatus.CANCELLED),
-    )
+)
 
+def random_code():
+    """
+    The function `random_code` generates a random code with 12 chars using the UUID library in Python.
+    The code returns the last part of a randomly generated UUID.
+    """
+    return str(uuid.uuid4()).split("-")[-1]
+#end def
 
 # Create your models here.
 class BaseModel(models.Model):
@@ -37,7 +46,8 @@ class Vendor(BaseModel):
                 help_text="vendors name") 
     contact_details = models.TextField(help_text="Contact information of the vendor") 
     address = models.TextField(help_text="Physical address of the vendor") 
-    vendor_code = models.CharField(unique=True, max_length=10) # A unique identifier for the vendor.
+    vendor_code = models.CharField(unique=True, max_length=10,default=random_code, editable=False
+                                   ) # A unique identifier for the vendor.
     on_time_delivery_rate = models.FloatField(default=0.0,
                 help_text="Tracks the percentage of on-time deliveries") 
     quality_rating_avg = models.FloatField(default=0.0,
@@ -52,7 +62,10 @@ class Vendor(BaseModel):
         verbose_name_plural = "Vendors"
 
     def __str__(self):
-        return '{} - {}'.format(self.name ,self.vendor_code)
+        return '{}'.format(self.name ,)
+    
+    def get_absolute_url(self):
+        return reverse("vendor_detail", kwargs={"pk": self.pk})
 
     def get_purchase_orders_by_status(
         self, status=Union[OrderStatus, str] | None
@@ -124,7 +137,6 @@ class Vendor(BaseModel):
         else:
             return 0
     
-    
 #end class
 
 class PurchaseOrder(BaseModel):
@@ -154,7 +166,7 @@ class PurchaseOrder(BaseModel):
         verbose_name_plural = "Purchase Orders"
     
     def __str__(self):
-        return '{} : {} '.format(self.po_number, self.vendor.name)
+        return '{} : {}'.format(self.po_number, self.vendor.name)
 
 #end class
     

@@ -15,9 +15,22 @@ class OrderStatus(StrEnum):
 #end class
 
 po_number_for_test = ['po1','po2','po3']
-vendor_code_for_test = ['1','2',]
+#vendor_code_for_test = ['1','2',]
+vendor_id_created_for_test = []
 
 print("****************Running ",os.path.basename(__file__),"**************************")
+#Following code retrieves the token for a user.
+#You can also use POSTMAN:Enter URL=http://127.0.0.1:8000/api-token-auth/ with method=POST,
+# then select the 'Body' tab and under 'raw' enter {"username":"admin","password": "admin"} 
+url = 'http://127.0.0.1:8000/api-token-auth/'
+response = requests.post(url,data={'username': 'admin', 'password': 'admin'})
+print('Response from server: ' + str(response.json()))
+response_dict = json.loads(response.text)
+token = response_dict['token']
+print('token=',token) ## This token is valid infinitely long time.
+HEADERS={"Authorization": "Token " + token }
+print("#############################")
+
 print("Creating 3 purchase orders for testing.....")
 #Send a POST request to create a new vendor
 print("..1st we create a vendor..")
@@ -25,17 +38,17 @@ print("....Sending POST /api/vendors/")
 response = requests.post("http://127.0.0.1:8000/api/vendors/", 
     data={'name': 'vendor1', 'contact_details': 'vendor1 contact details here',
           'address': 'vendor1 address here',
-          'vendor_code': vendor_code_for_test[0], 
           'on_time_delivery_rate': 0.0,
           'quality_rating_avg': 0.0,
           'fulfillment_rate': 0.0,
           'average_response_time': 0.0
           },
-    #headers={"Content-Type": "application/json"},
+    headers=HEADERS,
 )
 print('....Response from server: ' + str(response.json()))
 response_dict = json.loads(response.text)
-vendor_id1 = response_dict["id"] 
+vendor_id1 = response_dict["id"]
+vendor_id_created_for_test.append(vendor_id1)
 print("....successfully created vendor_id:",vendor_id1)
 
 print("Sending POST /api/purchase_orders/")
@@ -52,7 +65,7 @@ response = requests.post("http://127.0.0.1:8000/api/purchase_orders/",
           'items': json.dumps("Really Cool Item"),
           #'items':  json.dumps({"item_name": "Cool Item", "quantity":13, "unit_price": 1.0}) #This works too
           },
-    
+    headers=HEADERS,
 )
 print('Response from server: ' + str(response.json()))
 response_dict = json.loads(response.text)
@@ -73,7 +86,7 @@ response = requests.post("http://127.0.0.1:8000/api/purchase_orders/",
           'items': json.dumps("Another awesome Item"),
           #'items':  json.dumps({"item_name": "Cool Item", "quantity":13, "unit_price": 1.0}) #This works too
           },
-    
+    headers=HEADERS,
 )
 print('Response from server: ' + str(response.json()))
 response_dict = json.loads(response.text)
@@ -94,7 +107,7 @@ response = requests.post("http://127.0.0.1:8000/api/purchase_orders/",
           'items': json.dumps("Weird Item"),
           #'items':  json.dumps({"item_name": "Cool Item", "quantity":13, "unit_price": 1.0}) #This works too
           },
-    
+    headers=HEADERS,
 )
 print('Response from server: ' + str(response.json()))
 response_dict = json.loads(response.text)
@@ -105,13 +118,13 @@ print("########################################")
 #Send a GET request to retrieve historical performance
 print("Initial historical performance")
 print("Sending GET /api/vendors/{}/performance/".format(vendor_id1))
-response = requests.get("http://127.0.0.1:8000//api/vendors/{}/performance/".format(vendor_id1))
+response = requests.get("http://127.0.0.1:8000//api/vendors/{}/performance/".format(vendor_id1),headers=HEADERS,)
 print('Response from server: ' + str(response.json()))
 print("########################################")
 
 print("Acknowledging a purchase order")
 print("Sending PUT /api/purchase_orders/{}/acknowledge/".format(po_id1))
-response = requests.put("http://127.0.0.1:8000/api/purchase_orders/{}/acknowledge/".format(po_id1),
+response = requests.patch("http://127.0.0.1:8000/api/purchase_orders/{}/acknowledge/".format(po_id1),
     data={'po_number': po_number_for_test[0], 
           'vendor': vendor_id1, # NOTE: This needs to valid vendor
           'order_date':          '2024-01-01T08:00:00',#'2024-01-01T01:01:00.00',
@@ -123,12 +136,13 @@ response = requests.put("http://127.0.0.1:8000/api/purchase_orders/{}/acknowledg
           'quality_rating': 0.0,
           'items': json.dumps("Really Cool Item"),
           },
-                        )
+    headers=HEADERS,
+)
 print('Response from server: ' + str(response.json()))
 print("#######")
 print("Historical performance after above acknowledgement")
 print("Sending GET /api/vendors/{}/performance/".format(vendor_id1))
-response = requests.get("http://127.0.0.1:8000//api/vendors/{}/performance/".format(vendor_id1))
+response = requests.get("http://127.0.0.1:8000//api/vendors/{}/performance/".format(vendor_id1),headers=HEADERS,)
 print('Response from server: ' + str(response.json()))
 print("########################################")
 
@@ -147,7 +161,7 @@ response = requests.put("http://127.0.0.1:8000/api/purchase_orders/{}/".format(p
           'items': json.dumps("Really Cool Item"),
           #'items':  json.dumps({"item_name": "Cool Item", "quantity":13, "unit_price": 1.0}) #This works too
           },
-    
+    headers=HEADERS,
 )
 print('Response from server: ' + str(response.json()))
 response_dict = json.loads(response.text)
@@ -158,7 +172,7 @@ print("########")
 #Send a GET request to retrieve historical performance
 print("Historical performance after above update")
 print("Sending GET /api/vendors/{}/performance/".format(vendor_id1))
-response = requests.get("http://127.0.0.1:8000//api/vendors/{}/performance/".format(vendor_id1))
+response = requests.get("http://127.0.0.1:8000//api/vendors/{}/performance/".format(vendor_id1),headers=HEADERS,)
 print('Response from server: ' + str(response.json()))
 print("########################################")
 
@@ -177,27 +191,24 @@ response = requests.put("http://127.0.0.1:8000/api/purchase_orders/{}/".format(p
           'items': json.dumps("Another awesome Item"),
           #'items':  json.dumps({"item_name": "Cool Item", "quantity":13, "unit_price": 1.0}) #This works too
           },
-    
+    headers=HEADERS,
 )
 print('Response from server: ' + str(response.json()))
 print("########")
 print("Historical performance after above update")
 print("Sending GET /api/vendors/{}/performance/".format(vendor_id1))
-response = requests.get("http://127.0.0.1:8000//api/vendors/{}/performance/".format(vendor_id1))
+response = requests.get("http://127.0.0.1:8000//api/vendors/{}/performance/".format(vendor_id1),headers=HEADERS,)
 print('Response from server: ' + str(response.json()))
 print("#################################################")
 
 print("Now we delete all vendors that we created in this test script:")
-response = requests.get('http://127.0.0.1:8000/api/vendors/')
-response_list_of_dict_vendors = json.loads(response.text)
 
  #we delete all these vendors
-for i in range(len(response_list_of_dict_vendors)):
-    if response_list_of_dict_vendors[i]["vendor_code"] in vendor_code_for_test:
-       vendor_id = response_list_of_dict_vendors[i]["id"]
-       print("Sending DELETE /api/vendors/{}/".format(vendor_id))
-       response = requests.delete( "http://127.0.0.1:8000/api/vendors/{}/".format(vendor_id),)
-       print("..Successfully deleted vendor_id = {}".format(vendor_id))
+for i in range(len(vendor_id_created_for_test)):
+    vendor_id = vendor_id_created_for_test[i]
+    print("Sending DELETE /api/vendors/{}/".format(vendor_id))
+    response = requests.delete("http://127.0.0.1:8000/api/vendors/{}/".format(vendor_id),headers=HEADERS,)
+    print("..Successfully deleted vendor_id = {}".format(vendor_id))
 
 print("All purchase orders that were created for above vendors for testing are deleted too.")
 print();print();print();print();print();

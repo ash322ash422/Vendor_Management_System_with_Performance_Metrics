@@ -61,7 +61,7 @@ Now go inside 'VMS\api' directory and run test to verify functionality of endpoi
 
 (venv) C:\Users\hi\my_project> cd VMS\api
 
-(venv) C:\Users\hi\my_project\VMS\api> python test_api1_vendors.py
+(venv) C:\Users\hi\my_project\VMS\api> python test/test_api1_vendors.py
 
 This checks following endpoints:
 
@@ -75,8 +75,7 @@ PUT /api/vendors/{vendor_id}/
 
 DELETE /api/vendors/{vendor_id}/
 
-
-(venv) C:\Users\hi\my_project\VMS\api> python test_api2_purchase_orders.py
+(venv) C:\Users\hi\my_project\VMS\api> python test/test_api2_purchase_orders.py
 
 This checks following endpoints:
 
@@ -90,11 +89,9 @@ PUT /api/purchase_orders/{po_id}/
 
 DELETE /api/purchase_orders/{po_id}/
 
-(venv) C:\Users\hi\my_project\VMS\api> python test_api3_backend_logic.py
+(venv) C:\Users\hi\my_project\VMS\api> python test/test_api3_backend_logic.py
 
 This checks following endpoints:
-
-GET /api/vendors/{vendor_id}/performance/
 
 GET /api/vendors/{vendor_id}/performance/
 
@@ -102,7 +99,7 @@ PUT /api/purchase_orders/{po_id}/acknowledge/
 
 -OR- you can run all of the above 3 test by going up 1 directory and simply typing:
 
-(venv) C:\Users\hi\my_project\VMS> python manage.py test
+(venv) C:\Users\hi\my_project\VMS> python.exe manage.py test -v 2 api/test/
 
 8) I performed above test and output is given in file test_output.txt
 

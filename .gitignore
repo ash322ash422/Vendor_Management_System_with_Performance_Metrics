@@ -3,3 +3,5 @@ __pycache__/*
 
 .env
 .venv/*
+
+VMS_2024_06*
