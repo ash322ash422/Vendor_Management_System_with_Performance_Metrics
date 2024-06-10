@@ -97,7 +97,7 @@ GET /api/vendors/{vendor_id}/performance/
 
 PUT /api/purchase_orders/{po_id}/acknowledge/
 
--OR- you can run all of the above 3 test by going up 1 directory and simply typing:
+-OR- you can run all of the above 3 test and other tests by going up 1 directory and simply typing:
 
 (venv) C:\Users\hi\my_project\VMS> python.exe manage.py test -v 2 api/test/
 
