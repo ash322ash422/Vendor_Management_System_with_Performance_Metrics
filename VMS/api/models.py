@@ -167,6 +167,10 @@ class PurchaseOrder(BaseModel):
     
     def __str__(self):
         return '{} : {}'.format(self.po_number, self.vendor.name)
+    
+    def get_absolute_url(self):
+        return reverse("purchase_order_detail", kwargs={"pk": self.pk})
+
 
 #end class
     

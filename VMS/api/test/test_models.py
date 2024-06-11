@@ -1,5 +1,6 @@
 from django.test import TestCase
 from api.models import Vendor , HistoricalPerformance, PurchaseOrder
+from django.urls import reverse
 
 #To run test: ..\Vendor_Management_System_with_Performance_Metrics\VMS> python.exe .\manage.py test -v 2 api/test/
 #To run  the test: python manage.py test <app_name>
@@ -15,7 +16,7 @@ class VendorModelTestCase(TestCase): #Works
             "address": "test address of Ash",
         }
         self.vendor = self.model.objects.create(**self.vendor_data)
-        #self.vendor_url = self.vendor.get_absolute_url() #TODO
+        self.vendor_url = self.vendor.get_absolute_url() #TODO
     
     def test_model_instance(self):
         self.assertIsInstance(self.vendor, self.model)
@@ -25,14 +26,12 @@ class VendorModelTestCase(TestCase): #Works
             "mismatch model string representaion",
         )
     
-    
-    """
     def test_model_absolute_url(self):
         expected_model_url = reverse(
-            "vendors:vendor-actions", kwargs={"pk": self.vendor.pk}
+            "vendor_detail", kwargs={"pk": self.vendor.pk}
         )
         self.assertEqual(self.vendor_url, expected_model_url, "Invalid url")
-    """
+    
     
     def test_method_get_purchase_orders_by_status_by_providing_non_status_value(self):
         filter_purchase_orders = self.vendor.get_purchase_orders_by_status(
@@ -80,7 +79,7 @@ class HistoricalPerformanceTestCase(TestCase): #Works
         
 #end class
 
-class PurchaseOrderModelTestCase(TestCase):
+class PurchaseOrderModelTestCase(TestCase): #works
     def setUp(self):
         self.model = PurchaseOrder
         # Create a vendor model for testing
@@ -105,10 +104,9 @@ class PurchaseOrderModelTestCase(TestCase):
         self.purchase_order = self.model.objects.create(
             vendor=self.vendor, **self.po_data
         )
-        #TODO
-        #self.purchase_order_url = self.purchase_order.get_absolute_url()
-        #self.purchase_order_url = reverse("orders:purchase-order-list")
-
+        
+        self.purchase_order_url = self.purchase_order.get_absolute_url()
+        
     def test_model_instance(self):
         self.assertTrue(isinstance(self.purchase_order, self.model))
         self.assertEqual(
@@ -116,11 +114,10 @@ class PurchaseOrderModelTestCase(TestCase):
             f"{self.purchase_order.po_number} : {self.purchase_order.vendor}",
             "mismatch model string representaion",
         )
-        
-    """
+    
     def test_model_absolute_url(self):
         expected_model_url = reverse(
-            "orders:purchase-order-actions", kwargs={"pk": self.purchase_order.pk}
+            "purchase_order_detail", kwargs={"pk": self.purchase_order.pk}
         )
         self.assertEqual(self.purchase_order_url, expected_model_url, "Invalid url")
-    """
+    

@@ -65,8 +65,7 @@ class PurchaseOrderAcknowledgeSerializerTestCase(TestCase):
         self.purchase_order.refresh_from_db()
         self.assertEqual(
             self.purchase_order.acknowledgment_date,
-            timezone.datetime(2023, 1, 1, 12, 0, 0, tzinfo=datetime.timezone.utc), #This was original
-            #timezone.datetime(2023, 1, 1, 12, 0, 0,),
+            timezone.datetime(2023, 1, 1, 12, 0, 0, tzinfo=datetime.timezone.utc), 
         )
 
     def test_missing_acknowledge_date(self):
