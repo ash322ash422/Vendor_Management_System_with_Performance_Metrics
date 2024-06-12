@@ -123,7 +123,7 @@ print('Response from server: ' + str(response.json()))
 print("########################################")
 
 print("Acknowledging a purchase order")
-print("Sending PUT /api/purchase_orders/{}/acknowledge/".format(po_id1))
+print("Sending PATCH /api/purchase_orders/{}/acknowledge/".format(po_id1))
 response = requests.patch("http://127.0.0.1:8000/api/purchase_orders/{}/acknowledge/".format(po_id1),
     data={'po_number': po_number_for_test[0], 
           'vendor': vendor_id1, # NOTE: This needs to valid vendor

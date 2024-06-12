@@ -16,14 +16,14 @@ class VendorModelTestCase(TestCase): #Works
             "address": "test address of Ash",
         }
         self.vendor = self.model.objects.create(**self.vendor_data)
-        self.vendor_url = self.vendor.get_absolute_url() #TODO
+        self.vendor_url = self.vendor.get_absolute_url() 
     
     def test_model_instance(self):
         self.assertIsInstance(self.vendor, self.model)
         self.assertEqual(
             str(self.vendor),
             self.vendor_data.get("name"),
-            "mismatch model string representaion",
+            "mismatch model string representation",
         )
     
     def test_model_absolute_url(self):
@@ -39,11 +39,11 @@ class VendorModelTestCase(TestCase): #Works
         )
         self.assertIsNone(filter_purchase_orders)
 
-    def test_calc_on_time_delivery_rate_for_zero_divison_error_returned_value(self):
+    def test_calc_on_time_delivery_rate_for_zero_division_error_returned_value(self):
         on_time_delivery_rate = self.vendor.calc_on_time_delivery_rate()
         self.assertEqual(on_time_delivery_rate, 0)
 
-    def test_calc_fullfillment_for_zero_divison_error_returned_value(self):
+    def test_calc_fulfillment_for_zero_division_error_returned_value(self):
         fulfillment_rate = self.vendor.calc_fulfillment_rate()
         self.assertEqual(fulfillment_rate, 0)
 
@@ -112,7 +112,7 @@ class PurchaseOrderModelTestCase(TestCase): #works
         self.assertEqual(
             str(self.purchase_order),
             f"{self.purchase_order.po_number} : {self.purchase_order.vendor}",
-            "mismatch model string representaion",
+            "mismatch model string representation",
         )
     
     def test_model_absolute_url(self):

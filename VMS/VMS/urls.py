@@ -50,6 +50,6 @@ urlpatterns = [
     path("api/purchase_orders/<int:pk>/acknowledge/",
         views.PurchaseOrderAcknowledgeView.as_view(),
         name="purchase_order_acknowledge",
-        ), #TODO: Handles put ...->patch
+        ), #Handles PATCH
 ]
 
